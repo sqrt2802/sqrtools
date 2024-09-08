@@ -14,6 +14,6 @@ sqrtools 内置了可直接使用的简易 REPL，也可以将 sqrtools 作为 p
 sqrtools 的 API 接口调用文档位于 [docs.md](docs.md) 中。
 
 sqrtools 欢迎来自社区的帮助。如果你发现了 bug 或可能的改进，请通过 Issue / PR 的方式提出。\
-**不接受任何关于改变代码风格的建议。**你可以在新代码中按照自己的习惯编写，我\(sqrt2802\)会在合并时统一码风。
+**不接受任何关于改变代码风格的建议。** 你可以在新代码中按照自己的习惯编写，我\(sqrt2802\)会在合并时统一码风。
 
 本项目按 [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) 协议开源。
