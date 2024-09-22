@@ -87,6 +87,8 @@ name.reusable=True
 
 Reusable 模式允许你重复使用一个 `Name` 变量，但名字加载锁仍然存在，非法操作会被自动阻止。在你对变量载入新的字符串后，名字加载锁会重置。
 
+需要注意的是，对新名字执行第一次 `check()` 操作后，Reusable 模式状态将被锁定，锁定后所有试图打开/关闭 Reusable 模式的操作都不会起到任何作用。
+
 #### NameDev 扩展类
 
 `NameDev` 是提供给有进阶需求玩家的扩展类型。此类型对外暴露更多的数据属性，并具有适配加成计算的 `namebonus` 和 `calcprops(info)`。`NameDev` 的 `calcprops(info)` 需要一个数组参数 `info`。对于单个号的计算，这一参数应为对应的 `namebase`；计算加成时，可根据需要传入其他名字的相关数值。

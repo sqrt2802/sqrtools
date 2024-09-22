@@ -12,9 +12,12 @@ class Name:
         self.__sklfreq=[0]*40
         self.nameskill=[(-1,0)]*40
         self.reusable=False
+        self.__reusablestate=False
         self.__lock=0
     def check(self,namein:str)->int:
-        if not self.reusable:
+        if self.__lock==0:
+            self.__reusablestate=self.reusable
+        if not self.__reusablestate:
             if self.__lock!=0:
                 return 1
         self.__lock=1
@@ -42,7 +45,7 @@ class Name:
         self.__teamlen+=1
         return 0
     def load(self)->bool:
-        if self.reusable:
+        if self.__reusablestate:
             if self.__lock<1:
                 return False
             self.val=list(range(256))
@@ -84,7 +87,7 @@ class Name:
             self.nameprop[i]+=36
         return True
     def calcskill(self)->bool:
-        if self.reusable:
+        if self.__reusablestate:
             if self.__lock<2:
                 return False
             self.__sklid=list(range(0,40))
