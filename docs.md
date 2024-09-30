@@ -91,7 +91,9 @@ Reusable 模式允许你重复使用一个 `Name` 变量，但名字加载锁仍
 
 #### NameDev 扩展类
 
-`NameDev` 是提供给有进阶需求玩家的扩展类型。此类型对外暴露更多的数据属性，并具有适配加成计算的 `namebonus` 和 `calcprops(info)`。`NameDev` 的 `calcprops(info)` 需要一个数组参数 `info`。对于单个号的计算，这一参数应为对应的 `namebase`；计算加成时，可根据需要传入其他名字的相关数值。
+`NameDev` 是提供给有进阶需求玩家的扩展类型。此类型对外暴露更多的数据属性，并具有适配加成计算的 `namebonus` 相关内容。
+
+`NameDev` 的 `calcprops()` 和 `calcskill()` 需要一个布尔值参数 `usebonus`。当这一参数设为 `True` 时，将开启加成功能，否则只返回单号技能。
 
 与 `Name` 相比，`NameDev` 不受名字加载锁的限制，但非法操作仍会造成未定义的行为或出现错误，请谨慎使用。
 

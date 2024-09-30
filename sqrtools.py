@@ -188,9 +188,12 @@ class NameDev:
                 s+=1
         self.namebonus[:]=self.namebase[:]
         return
-    def calcprops(self,info):
+    def calcprops(self,usebonus):
         propcnt=1
-        r=info[0:32]
+        if usebonus==True:
+            r=self.namebonus[0:32]
+        else:
+            r=self.namebase[0:32]
         for i in range(10,31,3):
             r[i:i+3]=sorted(r[i:i+3])
             self.nameprop[propcnt]=r[i+1]
@@ -202,7 +205,7 @@ class NameDev:
         for i in range(1,8):
             self.nameprop[i]+=36
         return
-    def calcskill(self):
+    def calcskill(self,usebonus):
         self.sklid=list(range(0,40))
         self.sklfreq=[0]*40
         self.sklflag=[True]*40
@@ -226,8 +229,11 @@ class NameDev:
         last=-1
         j=0
         for i in range(64,128,4):
-            p=min(self.namebonus[i],self.namebonus[i+1],self.namebonus[i+2],self.namebonus[i+3])%256
             q=min(self.namebase[i],self.namebase[i+1],self.namebase[i+2],self.namebase[i+3])%256
+            if usebonus==True:
+                p=min(self.namebonus[i],self.namebonus[i+1],self.namebonus[i+2],self.namebonus[i+3])%256
+            else:
+                p=q
             if p>10:
                 if self.sklid[j]<35:
                     self.sklfreq[j]=p-10
@@ -266,17 +272,22 @@ if __name__=="__main__":
             return False
         else:
             return True
-    def prop(namearg):
+    def prop(namearg,verbose):
         name=Name()
         if errcatch(name.check(namearg))==False:
             return
+        propname=["HP","攻","防","速","敏","魔","抗","智"]
         if lockcatch(name.load())==False:
             return
         if lockcatch(name.calcprops())==False:
             return
         for i in range(8):
+            if verbose:
+                print(propname[i],end='')
             print(name.nameprop[i],end=' ')
         print()
+        if verbose:
+            print("八围",round(name.nameprop[0]/3,1)+sum(name.nameprop[1:8])," 嘲讽值",name.nameprop[1]+name.nameprop[3]+name.nameprop[5]+(name.nameprop[4]+name.nameprop[7])/2-name.nameprop[2]-name.nameprop[6],sep='')
         return
     def skill(namearg):
         name=Name()
@@ -318,7 +329,7 @@ if __name__=="__main__":
             exit()
             return
         def do_help(self,arg):
-            print("命令列表:\nprop - 计算名字属性\nskill - 计算名字技能\npeek - 查看计算中间产物\nhelp - 获取帮助\nexit - 退出")
+            print("命令列表:\nprop - 计算名字属性\nskill - 计算名字技能\npeek - 查看计算中间产物\nconv - 转换器快捷方式\nhelp - 获取帮助\nexit - 退出")
             return
         def do_prop(self,arg):
             arg=arg.split()
@@ -327,7 +338,7 @@ if __name__=="__main__":
                 return
             if arg[0]=="-i":
                 arg[0]=input("输入名字: ")
-            prop(arg[0])
+            prop(arg[0],False)
             return
         def do_skill(self,arg):
             arg=arg.split()
@@ -346,5 +357,15 @@ if __name__=="__main__":
             if arg[0]=="-i":
                 arg[0]=input("输入名字: ")
             peek(arg[0])
+            return
+        def do_conv(self,arg):
+            arg=arg.split()
+            if(len(arg)!=1):
+                print("用法: conv <名字> 或 conv -i\n直接输入的名字不能含有空格。如果有，使用选项 -i 进入交互式输入。")
+                return
+            if arg[0]=="-i":
+                arg[0]=input("输入名字: ")
+            prop(arg[0],True)
+            skill(arg[0])
             return
     Reader().cmdloop()
