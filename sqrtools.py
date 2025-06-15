@@ -1,4 +1,6 @@
 SQRTOOLS_VERSION="0.0.0" #Testbed version
+propname=["HP","攻","防","速","敏","魔","抗","智"]
+sklname=["火球","冰冻","雷击","地裂","吸血","投毒","连击","会心","瘟疫","命轮","狂暴","魅惑","加速","减速","诅咒","治愈","苏生","净化","铁壁","蓄力","聚气","潜行","血祭","分身","幻术","防御","守护","反弹","护符","护盾","反击","吞噬","亡灵","垂死","隐匿","空技能","空技能","空技能","空技能","空技能"]
 class Name:
     def __init__(self):
         self.__val=[]
@@ -119,8 +121,6 @@ if __name__=="__main__":
     import cmd
     from operator import itemgetter
     from sys import exit
-    propname=["HP","攻","防","速","敏","魔","抗","智"]
-    sklname=["火球","冰冻","雷击","地裂","吸血","投毒","连击","会心","瘟疫","命轮","狂暴","魅惑","加速","减速","诅咒","治愈","苏生","净化","铁壁","蓄力","聚气","潜行","血祭","分身","幻术","防御","守护","反弹","护符","护盾","反击","吞噬","亡灵","垂死","隐匿","空技能","空技能","空技能","空技能","空技能"]
     class Reader(cmd.Cmd):
         intro="sqrtools - 名字竞技场小工具\nTestbed | sqrt2802, 2025.\n\n输入 help 以获取用法说明\n"
         prompt='>'
@@ -130,7 +130,8 @@ if __name__=="__main__":
             exit()
             return
         def do_help(self,arg):
-            print("\n命令列表:\nconv - 转换器快捷方式\nbase - 数值来源与加成潜力查询\npeek - 查看 val/namebase\nhelp - 获取帮助\nexit - 退出\n\n除 help 和 exit 外的计算命令格式均为 <命令名称> <名字>\n")
+            print("\n命令列表:\nconv - 转换器快捷方式\nbase - 数值来源与加成潜力查询\naddon - 组队加成计算\npeek - 查看 val/namebase\nhelp - 获取帮助\nexit - 退出\n")
+            print("除 addon, help 和 exit 外的计算命令格式均为 <命令名称> <名字>\naddon 命令格式为 addon <加号分隔的战组>, 也可以不附加参数进入交互输入模式\n")
             return
         def do_peek(self,arg):
             if arg=='':
@@ -162,7 +163,7 @@ if __name__=="__main__":
             for i in range(8):
                 print(propname[i],name.nameprop[i],sep='',end=' ')
             cf=(name.nameprop[1]+name.nameprop[3]+name.nameprop[5])*2+name.nameprop[4]+name.nameprop[7]-name.nameprop[2]*2-name.nameprop[6]*2
-            print("\n八围",round(name.nameprop[0]/3,1)+sum(name.nameprop[1:8])," 嘲讽值",cf,'(',cf/2.0,')',sep='')
+            print("\n八围",round(name.nameprop[0]/3,1)+sum(name.nameprop[1:8])," 嘲讽值",cf,sep='')
             name.calcskill(False)
             rec=sorted(name.nameskill,key=itemgetter(1),reverse=True)
             for now in rec:
@@ -231,6 +232,63 @@ if __name__=="__main__":
                             print(str(name.nameskill[i][1]).zfill(2),'/',str(a if a>b else b).zfill(2),"(末尾座位加成",' '.join(str(j).zfill(2) for j in name.namebase[32+i*2:34+i*2])+')')
                     else:
                         print(str(name.nameskill[i][1]).zfill(2),'/',str(r[1]-10 if r[1]>10 else 0).zfill(2))
+            print()
+            return
+        def do_addon(self,arg):
+            def calcbonus(target,addon):
+                for i in range(7,128):
+                    if addon[i-1]==target.namebase[i]:
+                        target.namebonus[i]=max(target.namebonus[i],addon[i])
+                return
+            strin=[]
+            namelist=[]
+            if arg=='':
+                print("输入名字, 一行一个号, 空行结束:")
+                while True:
+                    now=input()
+                    if now=='':
+                        break
+                    strin.append(now)
+            else:
+                strin=arg.split('+')
+            for now in strin:
+                namelist.append(Name())
+                if not namelist[-1].load(now):
+                    print("名字载入出错\n")
+                    return
+            for i in range(len(namelist)):
+                for j in range(i+1,len(namelist)):
+                    calcbonus(namelist[i],namelist[j].namebase)
+                    calcbonus(namelist[j],namelist[i].namebase)
+            print("\n组队数值:\n")
+            prop=[]
+            bonus=[]
+            for i in range(len(namelist)):
+                print(strin[i])
+                namelist[i].calcprops(False)
+                prop[:]=namelist[i].nameprop[:]
+                namelist[i].calcprops(True)
+                bonus[:]=namelist[i].nameprop[:]
+                for j in range(8):
+                    print(propname[j],bonus[j],(("(+"+str(bonus[j]-prop[j])+')') if bonus[j]!=prop[j] else ''),sep='',end=' ')
+                bw1=round(prop[0]/3,1)+sum(prop[1:8])
+                bw2=round(bonus[0]/3,1)+sum(bonus[1:8])
+                cf1=(prop[1]+prop[3]+prop[5]-prop[2]-prop[6])*2+prop[4]+prop[7]
+                cf2=(bonus[1]+bonus[3]+bonus[5]-bonus[2]-bonus[6])*2+bonus[4]+bonus[7]
+                print()
+                namelist[i].calcskill(False)
+                prop[:]=namelist[i].nameskill[:]
+                namelist[i].calcskill(True)
+                bonus[:]=namelist[i].nameskill[:]
+                sklrec=[]
+                for j in range(16):
+                    if bonus[j][0]<35 and bonus[j][1]>0:
+                        sklrec.append((bonus[j][0],bonus[j][1],bonus[j][1]-prop[j][1]))
+                sklrec=sorted(sklrec,key=itemgetter(1),reverse=True)
+                for now in sklrec:
+                    print(sklname[now[0]],now[1],(("(+"+str(now[2])+')') if now[2]>0 else ''),sep='',end=' ')
+                print("\n八围",bw2,(("(+"+str(bw2-bw1)+')') if bw2!=bw1 else ''),sep='',end=' ')
+                print("嘲讽值",cf2,(f"({(cf2-cf1):+d})" if cf2!=cf1 else ''),sep='',end='\n\n')
             print()
             return
     Reader().cmdloop()

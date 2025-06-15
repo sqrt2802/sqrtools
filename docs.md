@@ -11,11 +11,13 @@ sqrtools 的接口调用指南。
 下载的 pyc 文件可以作为 python 库文件使用。把它和你的代码放在同一个文件夹（也可以是 `sys.path` 中的任意目录）中，使用一个合适的文件名，并直接在你的代码中导入即可：
 
 ```python
-import sqrtoolsfile as sqrtools    #导入名为 sqrtoolsfile.pyc 的文件
+import sqrtoolsfile as sqrtools    #导入名为 sqrtoolsfile 的文件
 my_awesome_name=sqrtools.Name()    #创建一个新的空白名字
 ```
 
 你可以通过 `sqrtools.SQRTOOLS_VERSION` 来查看 sqrtools 版本。
+
+`sqrtools.propname` 和 `sqrtools.sklname` 分别是八围属性和技能名称表。
 
 sqrtools 的主要功能是名为 `Name` 的 python 类。
 
@@ -25,17 +27,7 @@ sqrtools 的主要功能是名为 `Name` 的 python 类。
 
 - `namebase`, `namebonus`, `nameprop`: 顾名思义。`nameprop` 从前到后分别为 \[HP, 攻, 防, 速, 敏, 魔, 抗, 智\] 数值。
 
-- `nameskill` : 存储名字技能的 int 数组，由 16 个形如 (id, 熟练度) 的二元组组成。技能 id 与名称的对应关系如下：
-
-id|0|1|2|3|4|5|6|7|8|9
-:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:
-技能|火球|冰冻|雷击|地裂|吸血|投毒|连击|会心|瘟疫|命轮
-**id**|**10**|**11**|**12**|**13**|**14**|**15**|**16**|**17**|**18**|**19**
-技能|狂暴|魅惑|加速|减速|诅咒|治愈|苏生|净化|铁壁|蓄力
-**id**|**20**|**21**|**22**|**23**|**24**|**25**|**26**|**27**|**28**|**29**
-技能|聚气|潜行|血祭|分身|幻术|防御|守护|反弹|护符|护盾
-**id**|**30**|**31**|**32**|**33**|**34**|**35**|**36**|**37**|**38**|**39**
-技能|反击|吞噬|亡灵|垂死|隐匿|(空技能)|(空技能)|(空技能)|(空技能)|(空技能)
+- `nameskill` : 存储名字技能的 int 数组，由 16 个形如 (id, 熟练度) 的二元组组成。技能 id 与名称的对照表在教程中已经给出，在此不重复展示。
 
 ### Name 类型方法
 
@@ -57,6 +49,6 @@ id|0|1|2|3|4|5|6|7|8|9
 import sqrtools
 name=sqrtools.Name()
 name.load('1')
-name.calcprops()
+name.calcprops(False)
 print(name.nameprop)
 ```
