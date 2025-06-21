@@ -1,4 +1,4 @@
-SQRTOOLS_VERSION="0.0.0" #Testbed version
+SQRTOOLS_VERSION="0.0.0 (Mainline testbed)"
 propname=["HP","攻","防","速","敏","魔","抗","智"]
 sklname=["火球","冰冻","雷击","地裂","吸血","投毒","连击","会心","瘟疫","命轮","狂暴","魅惑","加速","减速","诅咒","治愈","苏生","净化","铁壁","蓄力","聚气","潜行","血祭","分身","幻术","防御","守护","反弹","护符","护盾","反击","吞噬","亡灵","垂死","隐匿","空技能","空技能","空技能","空技能","空技能"]
 class Name:
@@ -131,7 +131,7 @@ if __name__=="__main__":
             return None
         return name
     class Reader(cmd.Cmd):
-        intro="sqrtools - 名字竞技场小工具\nTestbed | sqrt2802, 2025.\n\n输入 help 以获取用法说明\n"
+        intro="sqrtools - 名字竞技场小工具\nv"+SQRTOOLS_VERSION+" | sqrt2802, 2025.\n\n输入 help 以获取用法说明\n"
         prompt='>'
         def emptyline(self):
             return
