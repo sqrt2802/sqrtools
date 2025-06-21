@@ -120,6 +120,16 @@ if __name__=="__main__":
     import cmd
     from operator import itemgetter
     from sys import exit
+    def argprs(argin):
+        if argin=='':
+            strin=input("输入名字: ")
+        else:
+            strin=argin
+        name=Name()
+        if not name.load(strin):
+            print("名字载入出错\n")
+            return None
+        return name
     class Reader(cmd.Cmd):
         intro="sqrtools - 名字竞技场小工具\nTestbed | sqrt2802, 2025.\n\n输入 help 以获取用法说明\n"
         prompt='>'
@@ -133,13 +143,8 @@ if __name__=="__main__":
             print("除 addon, help 和 exit 外的计算命令格式均为 <命令名称> <名字>\naddon 命令格式为 addon <加号分隔的战组>, 也可以不附加参数进入交互输入模式\n")
             return
         def do_peek(self,arg):
-            if arg=='':
-                strin=input("输入名字: ")
-            else:
-                strin=arg
-            name=Name()
-            if not name.load(strin):
-                print("名字载入出错\n")
+            name=argprs(arg)
+            if name==None:
                 return
             print("\n名字的 val 数值:")
             for i in name._Name__val:
@@ -150,13 +155,8 @@ if __name__=="__main__":
             print('\n')
             return
         def do_conv(self,arg):
-            if arg=='':
-                strin=input("输入名字: ")
-            else:
-                strin=arg
-            name=Name()
-            if not name.load(strin):
-                print("名字载入出错\n")
+            name=argprs(arg)
+            if name==None:
                 return
             name.calcprops(False)
             for i in range(8):
@@ -173,13 +173,8 @@ if __name__=="__main__":
             print('\n')
             return
         def do_base(self,arg):
-            if arg=='':
-                strin=input("输入名字: ")
-            else:
-                strin=arg
-            name=Name()
-            if not name.load(strin):
-                print("名字载入出错\n")
+            name=argprs(arg)
+            if name==None:
                 return
             print()
             r=name.namebase[0:32]
