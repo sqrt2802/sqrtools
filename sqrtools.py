@@ -9,7 +9,6 @@ class Name:
         self.nameprop:int=[0]*8
         self.__sklid=[]
         self.__sklfreq=[]
-        self.__sklflag=[]
         self.nameskill:list[tuple[int,int]]=[(0,0)]*16
     def load(self,namein:str)->bool:
         if namein=="" or namein.count('@')>1:
@@ -68,7 +67,7 @@ class Name:
     def calcskill(self,usebonus:bool)->None:
         self.__sklid=list(range(0,40))
         self.__sklfreq=[0]*16
-        self.__sklflag=[True]*16
+        sklflag=[True,True]
         a=b=0
         randbase=[]
         randbase[:]=self.__val[:]
@@ -89,32 +88,32 @@ class Name:
         last=-1
         j=0
         for i in range(64,128,4):
-            q=min(self.namebase[i],self.namebase[i+1],self.namebase[i+2],self.namebase[i+3])
+            q=min(self.namebase[i:i+4])
             if usebonus==True:
-                p=min(self.namebonus[i],self.namebonus[i+1],self.namebonus[i+2],self.namebonus[i+3])
+                p=min(self.namebonus[i:i+4])
             else:
                 p=q
             if p>10:
                 if self.__sklid[j]<35:
                     self.__sklfreq[j]=p-10
                 if q<=10:
-                    self.__sklflag[j]=False
+                    if j>=14:
+                        sklflag[j-14]=False
                 elif self.__sklid[j]<25:
                     last=j
             j+=1
         if last!=-1:
-            self.__sklflag[last]=False
+            if last>=14:
+                sklflag[last-14]=False
             self.__sklfreq[last]*=2
         if usebonus==True:
             info=self.namebonus
         else:
             info=self.namebase
-        if self.__sklfreq[14]>0 and self.__sklflag[14]:
+        if self.__sklfreq[14]>0 and sklflag[0]:
             self.__sklfreq[14]+=min(info[60],info[61],self.__sklfreq[14])
-            self.__sklflag[14]=False
-        if self.__sklfreq[15]>0 and self.__sklflag[15]:
+        if self.__sklfreq[15]>0 and sklflag[1]:
             self.__sklfreq[15]+=min(info[62],info[63],self.__sklfreq[15])
-            self.__sklflag[15]=False
         self.nameskill=list(zip(self.__sklid[0:16],self.__sklfreq))
         return
 if __name__=="__main__":
