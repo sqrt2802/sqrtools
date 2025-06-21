@@ -4,9 +4,9 @@ sklname=["火球","冰冻","雷击","地裂","吸血","投毒","连击","会心"
 class Name:
     def __init__(self):
         self.__val=[]
-        self.namebase:int=[0]*128
-        self.namebonus:int=[0]*128
-        self.nameprop:int=[0]*8
+        self.namebase:list[int]=[0]*128
+        self.namebonus:list[int]=[0]*128
+        self.nameprop:list[int]=[0]*8
         self.__sklid=[]
         self.__sklfreq=[]
         self.nameskill:list[tuple[int,int]]=[(0,0)]*16
