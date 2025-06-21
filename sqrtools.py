@@ -186,14 +186,12 @@ if __name__=="__main__":
             print("HP:",' '.join(str(i) for i in r[0:10]),sep=' ',end=' ')
             r[0:10]=sorted(r[0:10])
             print("->",154+sum(r[3:7]),'/',154+sum(r[4:8]),sep=' ')
-            name.nameprop[0]=154+sum(r[3:7])
             propcnt=1
             for i in range(10,31,3):
                 print(propname[propcnt],':',sep='',end=' ')
                 print(' '.join(str(j).zfill(2) for j in r[i:i+3]),end=' ')
                 r[i:i+3]=sorted(r[i:i+3])
                 print("->",r[i+1]+36,'/',r[i+2]+36)
-                name.nameprop[propcnt]=r[i+1]+36
                 propcnt+=1
             print()
             name.calcskill(False)
@@ -202,35 +200,29 @@ if __name__=="__main__":
                 if name.nameskill[i][1]>0 and name.nameskill[i][0]<25:
                     doubleflag=i
                     break
-            for i in range(14):
+            for i in range(16):
                 print("#",str(i).zfill(2),' ',sklname[name.nameskill[i][0]],sep='',end='')
                 if name.nameskill[i][0]>=35:
                     print()
                 else:
                     r=name.namebase[i*4+64:i*4+68]
-                    print(':',' '.join(str(j).zfill(2) for j in r),"->",end=' ')
+                    print(':',' '.join(str(j).zfill(2) for j in r),"->",str(name.nameskill[i][1]).zfill(2),'/',end=' ')
                     r=sorted(r)
-                    if doubleflag==i:
-                        print(str(name.nameskill[i][1]).zfill(2),'/',str((r[1]-10)*2 if r[1]>10 else 0).zfill(2),"(末尾主动)")
-                    else:
-                        print(str(name.nameskill[i][1]).zfill(2),'/',str(r[1]-10 if r[1]>10 else 0).zfill(2))
-            for i in range(14,16):
-                print("#",str(i).zfill(2),' ',sklname[name.nameskill[i][0]],sep='',end='')
-                if name.nameskill[i][0]>=35:
-                    print()
-                else:
-                    r=name.namebase[i*4+64:i*4+68]
-                    print(':',' '.join(str(j).zfill(2) for j in r),"->",end=' ')
-                    r=sorted(r)
-                    if name.nameskill[i][1]>0:
+                    if i<14:
                         if doubleflag==i:
-                            print(str(name.nameskill[i][1]).zfill(2),'/',str((r[1]-10)*2 if r[1]>10 else 0).zfill(2),"(末尾主动)")
+                            print(str((r[1]-10)*2 if r[1]>10 else 0).zfill(2),"(末尾主动)")
                         else:
-                            a=r[1]-10+min([r[1]-10]+name.namebase[32+i*2:34+i*2])
-                            b=r[0]-10+min(r[0]-10,max(name.namebase[32+i*2:34+i*2]))
-                            print(str(name.nameskill[i][1]).zfill(2),'/',str(a if a>b else b).zfill(2),"(末尾座位加成",' '.join(str(j).zfill(2) for j in name.namebase[32+i*2:34+i*2])+')')
+                            print(str(r[1]-10 if r[1]>10 else 0).zfill(2))
                     else:
-                        print(str(name.nameskill[i][1]).zfill(2),'/',str(r[1]-10 if r[1]>10 else 0).zfill(2))
+                        if name.nameskill[i][1]>0:
+                            if doubleflag==i:
+                                print(str((r[1]-10)*2 if r[1]>10 else 0).zfill(2),"(末尾主动)")
+                            else:
+                                a=r[1]-10+min([r[1]-10]+name.namebase[32+i*2:34+i*2])
+                                b=r[0]-10+min(r[0]-10,max(name.namebase[32+i*2:34+i*2]))
+                                print(str(a if a>b else b).zfill(2),"(末尾座位加成",' '.join(str(j).zfill(2) for j in name.namebase[32+i*2:34+i*2])+')')
+                        else:
+                            print(str(r[1]-10 if r[1]>10 else 0).zfill(2))
             print()
             return
         def do_addon(self,arg):
