@@ -8,8 +8,8 @@ sqrtools 内置了可直接使用的简易 REPL，也可以将 sqrtools 作为 p
 
 本仓库的 Releases 页面会发布：
 
-- 源码
-- 可供其他代码调用的 slim pyc 文件（去除了 REPL 部分，体积更小）
+- 完整源码和去除了 REPL 部分的 slim 版源码
+- 可供工具打包的 slim pyc 文件
 - 实验性的 windows REPL exe（可以在无 python 环境的情况下使用）
 
 sqrtools 在 python 3.9 上开发和测试，原则上不提供针对其他版本 python 的兼容性支持。\
