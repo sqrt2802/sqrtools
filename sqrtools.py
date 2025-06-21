@@ -223,7 +223,7 @@ if __name__=="__main__":
                     r=name.namebase[i*4+64:i*4+68]
                     print(':',' '.join(str(j).zfill(2) for j in r),"->",end=' ')
                     r=sorted(r)
-                    if name.nameskill[i][1]>=0:
+                    if name.nameskill[i][1]>0:
                         if doubleflag==i:
                             print(str(name.nameskill[i][1]).zfill(2),'/',str((r[1]-10)*2 if r[1]>10 else 0).zfill(2),"(末尾主动)")
                         else:
